@@ -61,5 +61,48 @@ class TaskController extends Controller
         ], 200);
 
     }
+
+    public function update(Request $request, $id){
+
+
+        $request->validate([
+            'body' => 'required',
+            'completed'=> 'required'
+        ]);
+
+        $ifTaskExists = Task::where('id', $id)->exists();
+
+        if(!$ifTaskExists){
+            return response()->json([
+                'errors' => "La tâche n'existe pas."
+            ], 404);
+        }
+
+        $task = Task::where('id', $id)->first();
+
+        if($task->user_id !== $request->user()->id){
+            return response()->json([
+                'errors' => "Accès à la tâche non autorisé."
+            ], 403);
+        }
+
+        $updatedTask = Task::find($id);
+
+
+
+        $updatedTask->body = $request->body;
+        $updatedTask->completed = $request->completed;
+        $updatedTask->save();
+
+        return response()->json([
+            'id' => $updatedTask->id,
+            'created_at' => $updatedTask->created_at,
+            'updated_at' => $updatedTask->updated_at,
+            'body' => $updatedTask->body,
+            'completed' => $updatedTask->done,
+            'user' => Auth()->user()
+        ], 200);
+
+    }
 }
 

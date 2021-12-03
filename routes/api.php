@@ -27,7 +27,10 @@ Route::post('auth/register', [ApiTokenController::class, 'register']);
 Route::post('auth/login', [ApiTokenController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('auth/task/create', [\App\Http\Controllers\TaskController::class, 'create']);
+Route::middleware('auth:sanctum')->post('auth/task/{id}', [\App\Http\Controllers\TaskController::class, 'update']);
 
 Route::middleware('auth:sanctum')->delete('auth/task/{id}', [\App\Http\Controllers\TaskController::class, 'delete']);
+
+
 
 
