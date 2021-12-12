@@ -28,6 +28,9 @@ class TaskController extends Controller
             'task' => $task,
         ], 201);
 
+
+
+
     }
 
     public function delete(Request $request, $id){
@@ -59,6 +62,8 @@ class TaskController extends Controller
             'completed' => $task->completed,
             'user' => Auth()->user()
         ], 200);
+
+
 
     }
 
@@ -103,11 +108,22 @@ class TaskController extends Controller
             'user' => Auth()->user()
         ], 200);
 
+
+
     }
 
     public function showAll(Request $request){
         $tasks = Task::where('user_id', Auth()->user()->id)->orderby('updated_at', 'desc')->orderby('created_at', 'asc')->get();
 
+        return response()->json([
+            'tasks' => $tasks
+        ], 201);
+
+
+    }
+
+    public function showToDo(Request $request){
+        $tasks = Task::where('user_id', Auth()->user()->id)->where('completed', 0)->get();
         return response()->json([
             'tasks' => $tasks
         ], 201);
